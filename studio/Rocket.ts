@@ -1,43 +1,75 @@
 import { Payload } from './Payload';
 import { Astronaut } from './Astronaut';
 import { Cargo } from './Cargo';
+
 export class Rocket {
-    // properties and methods
+
     name: string;
     totalCapacityKg: number;
-    cargoItems: Array = Cargo[item];
-    astronauts: Astronaut = [];
+    cargoItems: Cargo[] = [];
+    astronauts: Astronaut[] = [];
 
     constructor(name: string, totalCapacityKg: number) {
         this.name = name;
         this.totalCapacityKg = totalCapacityKg;
-        this.cargoItems = cargoItems
     }
 
     sumMass( items: Payload[] ): number {
+        let cargoSum = 0;
 
-
+        for (let item of this.cargoItems) {
+            cargoSum += item.massKg;
+        }
+        
+        return cargoSum;
     }
-    /*
+    
+    currentMassKg(): number {
+        let astronautSum = 0;
 
-Methods:
-sumMass( items: Payload[] ): number
-Returns the sum of all items using each item's massKg property
+        for (let astronaut of this.astronauts) {
+            astronautSum += astronaut.massKg;
+        }
 
-currentMassKg(): number
-Uses this.sumMass to return the combined mass of this.astronauts and this.cargoItems
+        return this.sumMass(this.cargoItems) + astronautSum;
+    }
 
-canAdd(item: Payload): boolean
-Returns true if this.currentMassKg() + item.massKg <= this.totalCapacityKg
+    canAdd(item: Payload): boolean {
+        if (this.currentMassKg() + item.massKg <= this.totalCapacityKg) {
 
-addCargo(cargo: Cargo): boolean
-Uses this.canAdd() to see if another item can be added.
-If true, adds cargo to this.cargoItems and returns true.
-If false, returns false.
+            return true;
 
-addAstronaut(astronaut: Astronaut): boolean
-Uses this.canAdd() to see if another astronaut can be added.
-If true, adds astronaut to this.astronauts and returns true.
-If false, returns false
-    */
- }
+        } else {
+
+            return false;
+
+        }
+    }
+  
+    addCargo(cargo: Cargo): boolean {
+        if (this.canAdd(cargo) === true) {
+
+            this.cargoItems.push(cargo);
+            return true; 
+
+        } else {
+
+            return false;
+
+        }
+    }
+   
+    addAstronaut(astronaut: Astronaut): boolean {
+        if (this.canAdd(astronaut) === true) {
+
+            this.astronauts.push(astronaut);
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+    }
+
+}
